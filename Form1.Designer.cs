@@ -80,12 +80,16 @@ namespace ExcelFromBase
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.опрограммеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.UserNameTxt = new System.Windows.Forms.Label();
+            this.TemplateFileName = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.UseTemplate = new System.Windows.Forms.CheckBox();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // QueryArea
             // 
-            this.QueryArea.Location = new System.Drawing.Point(12, 271);
+            this.QueryArea.Location = new System.Drawing.Point(12, 304);
             this.QueryArea.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.QueryArea.Multiline = true;
             this.QueryArea.Name = "QueryArea";
@@ -96,7 +100,7 @@ namespace ExcelFromBase
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(129, 78);
+            this.label1.Location = new System.Drawing.Point(28, 55);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(75, 13);
             this.label1.TabIndex = 2;
@@ -106,7 +110,7 @@ namespace ExcelFromBase
             // 
             this.StartWork.BackColor = System.Drawing.SystemColors.Highlight;
             this.StartWork.ForeColor = System.Drawing.SystemColors.Control;
-            this.StartWork.Location = new System.Drawing.Point(244, 421);
+            this.StartWork.Location = new System.Drawing.Point(244, 467);
             this.StartWork.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.StartWork.Name = "StartWork";
             this.StartWork.Size = new System.Drawing.Size(410, 33);
@@ -117,7 +121,7 @@ namespace ExcelFromBase
             // 
             // ServerName
             // 
-            this.ServerName.Location = new System.Drawing.Point(220, 74);
+            this.ServerName.Location = new System.Drawing.Point(31, 77);
             this.ServerName.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.ServerName.Name = "ServerName";
             this.ServerName.Size = new System.Drawing.Size(95, 20);
@@ -129,7 +133,7 @@ namespace ExcelFromBase
             this.StatusText.BackColor = System.Drawing.SystemColors.InfoText;
             this.StatusText.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.StatusText.ForeColor = System.Drawing.Color.LimeGreen;
-            this.StatusText.Location = new System.Drawing.Point(49, 372);
+            this.StatusText.Location = new System.Drawing.Point(49, 418);
             this.StatusText.Name = "StatusText";
             this.StatusText.Size = new System.Drawing.Size(898, 47);
             this.StatusText.TabIndex = 3;
@@ -138,7 +142,7 @@ namespace ExcelFromBase
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(50, 350);
+            this.label2.Location = new System.Drawing.Point(50, 383);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(211, 13);
             this.label2.TabIndex = 5;
@@ -146,7 +150,7 @@ namespace ExcelFromBase
             // 
             // ResultFile
             // 
-            this.ResultFile.Location = new System.Drawing.Point(267, 347);
+            this.ResultFile.Location = new System.Drawing.Point(267, 380);
             this.ResultFile.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.ResultFile.Name = "ResultFile";
             this.ResultFile.Size = new System.Drawing.Size(186, 20);
@@ -155,7 +159,7 @@ namespace ExcelFromBase
             // 
             // DataBaseName
             // 
-            this.DataBaseName.Location = new System.Drawing.Point(519, 74);
+            this.DataBaseName.Location = new System.Drawing.Point(267, 77);
             this.DataBaseName.Name = "DataBaseName";
             this.DataBaseName.Size = new System.Drawing.Size(86, 20);
             this.DataBaseName.TabIndex = 6;
@@ -164,11 +168,12 @@ namespace ExcelFromBase
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(332, 78);
+            this.label3.Location = new System.Drawing.Point(203, 55);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(181, 13);
+            this.label3.Size = new System.Drawing.Size(454, 13);
             this.label3.TabIndex = 7;
-            this.label3.Text = "Имя базы данных где есть доступ";
+            this.label3.Text = "Имя базы данных где есть доступ, напишите Деканат, если нет доступа к Абитуриенты" +
+    "";
             // 
             // label4
             // 
@@ -182,7 +187,7 @@ namespace ExcelFromBase
             // 
             // PresetData
             // 
-            this.PresetData.Location = new System.Drawing.Point(52, 124);
+            this.PresetData.Location = new System.Drawing.Point(31, 124);
             this.PresetData.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.PresetData.Name = "PresetData";
             this.PresetData.Size = new System.Drawing.Size(186, 20);
@@ -192,7 +197,7 @@ namespace ExcelFromBase
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(332, 261);
+            this.label5.Location = new System.Drawing.Point(332, 294);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(229, 13);
             this.label5.TabIndex = 10;
@@ -212,16 +217,16 @@ namespace ExcelFromBase
             // listBoxConfigs
             // 
             this.listBoxConfigs.FormattingEnabled = true;
-            this.listBoxConfigs.Location = new System.Drawing.Point(12, 149);
+            this.listBoxConfigs.Location = new System.Drawing.Point(12, 208);
             this.listBoxConfigs.Name = "listBoxConfigs";
-            this.listBoxConfigs.Size = new System.Drawing.Size(936, 95);
+            this.listBoxConfigs.Size = new System.Drawing.Size(936, 69);
             this.listBoxConfigs.TabIndex = 12;
             this.listBoxConfigs.SelectedIndexChanged += new System.EventHandler(this.ListBoxConfigs_SelectedIndexChanged);
             // 
             // LoadChoiceToArea
             // 
             this.LoadChoiceToArea.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-            this.LoadChoiceToArea.Location = new System.Drawing.Point(244, 235);
+            this.LoadChoiceToArea.Location = new System.Drawing.Point(244, 268);
             this.LoadChoiceToArea.Name = "LoadChoiceToArea";
             this.LoadChoiceToArea.Size = new System.Drawing.Size(410, 23);
             this.LoadChoiceToArea.TabIndex = 13;
@@ -234,7 +239,7 @@ namespace ExcelFromBase
             this.DisableMessages.AutoSize = true;
             this.DisableMessages.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.DisableMessages.ForeColor = System.Drawing.Color.Red;
-            this.DisableMessages.Location = new System.Drawing.Point(541, 51);
+            this.DisableMessages.Location = new System.Drawing.Point(541, 27);
             this.DisableMessages.Name = "DisableMessages";
             this.DisableMessages.Size = new System.Drawing.Size(406, 17);
             this.DisableMessages.TabIndex = 14;
@@ -294,7 +299,7 @@ namespace ExcelFromBase
             // toolStripSeparator
             // 
             this.toolStripSeparator.Name = "toolStripSeparator";
-            this.toolStripSeparator.Size = new System.Drawing.Size(6, 6);
+            this.toolStripSeparator.Size = new System.Drawing.Size(230, 6);
             // 
             // сохранитьToolStripMenuItem
             // 
@@ -302,19 +307,19 @@ namespace ExcelFromBase
             this.сохранитьToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.сохранитьToolStripMenuItem.Name = "сохранитьToolStripMenuItem";
             this.сохранитьToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.сохранитьToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
+            this.сохранитьToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
             this.сохранитьToolStripMenuItem.Text = "&Сохранить";
             // 
             // сохранитькакToolStripMenuItem
             // 
             this.сохранитькакToolStripMenuItem.Name = "сохранитькакToolStripMenuItem";
-            this.сохранитькакToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
+            this.сохранитькакToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
             this.сохранитькакToolStripMenuItem.Text = "Сохранить &как";
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(230, 6);
             // 
             // печатьToolStripMenuItem
             // 
@@ -322,7 +327,7 @@ namespace ExcelFromBase
             this.печатьToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.печатьToolStripMenuItem.Name = "печатьToolStripMenuItem";
             this.печатьToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-            this.печатьToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
+            this.печатьToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
             this.печатьToolStripMenuItem.Text = "&Печать";
             // 
             // предварительныйпросмотрToolStripMenuItem
@@ -330,18 +335,18 @@ namespace ExcelFromBase
             this.предварительныйпросмотрToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("предварительныйпросмотрToolStripMenuItem.Image")));
             this.предварительныйпросмотрToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.предварительныйпросмотрToolStripMenuItem.Name = "предварительныйпросмотрToolStripMenuItem";
-            this.предварительныйпросмотрToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
+            this.предварительныйпросмотрToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
             this.предварительныйпросмотрToolStripMenuItem.Text = "Предварительный про&смотр";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(230, 6);
             // 
             // выходToolStripMenuItem
             // 
             this.выходToolStripMenuItem.Name = "выходToolStripMenuItem";
-            this.выходToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
+            this.выходToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
             this.выходToolStripMenuItem.Text = "Вы&ход";
             // 
             // правкаToolStripMenuItem
@@ -363,20 +368,20 @@ namespace ExcelFromBase
             // 
             this.отменадействияToolStripMenuItem.Name = "отменадействияToolStripMenuItem";
             this.отменадействияToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.отменадействияToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
+            this.отменадействияToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
             this.отменадействияToolStripMenuItem.Text = "&Отмена действия";
             // 
             // отменадействияToolStripMenuItem1
             // 
             this.отменадействияToolStripMenuItem1.Name = "отменадействияToolStripMenuItem1";
             this.отменадействияToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-            this.отменадействияToolStripMenuItem1.Size = new System.Drawing.Size(32, 19);
+            this.отменадействияToolStripMenuItem1.Size = new System.Drawing.Size(217, 22);
             this.отменадействияToolStripMenuItem1.Text = "&Отмена действия";
             // 
             // toolStripSeparator3
             // 
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 6);
+            this.toolStripSeparator3.Size = new System.Drawing.Size(214, 6);
             // 
             // вырезатьToolStripMenuItem
             // 
@@ -384,7 +389,7 @@ namespace ExcelFromBase
             this.вырезатьToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.вырезатьToolStripMenuItem.Name = "вырезатьToolStripMenuItem";
             this.вырезатьToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-            this.вырезатьToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
+            this.вырезатьToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
             this.вырезатьToolStripMenuItem.Text = "Вырезат&ь";
             // 
             // копироватьToolStripMenuItem
@@ -393,7 +398,7 @@ namespace ExcelFromBase
             this.копироватьToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.копироватьToolStripMenuItem.Name = "копироватьToolStripMenuItem";
             this.копироватьToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.копироватьToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
+            this.копироватьToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
             this.копироватьToolStripMenuItem.Text = "&Копировать";
             // 
             // вставкаToolStripMenuItem
@@ -402,18 +407,18 @@ namespace ExcelFromBase
             this.вставкаToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.вставкаToolStripMenuItem.Name = "вставкаToolStripMenuItem";
             this.вставкаToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this.вставкаToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
+            this.вставкаToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
             this.вставкаToolStripMenuItem.Text = "Вст&авка";
             // 
             // toolStripSeparator4
             // 
             this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 6);
+            this.toolStripSeparator4.Size = new System.Drawing.Size(214, 6);
             // 
             // выделитьвсеToolStripMenuItem
             // 
             this.выделитьвсеToolStripMenuItem.Name = "выделитьвсеToolStripMenuItem";
-            this.выделитьвсеToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
+            this.выделитьвсеToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
             this.выделитьвсеToolStripMenuItem.Text = "Выделить &все";
             // 
             // сервисToolStripMenuItem
@@ -428,13 +433,13 @@ namespace ExcelFromBase
             // настройкиToolStripMenuItem
             // 
             this.настройкиToolStripMenuItem.Name = "настройкиToolStripMenuItem";
-            this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
+            this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.настройкиToolStripMenuItem.Text = "&Настройки";
             // 
             // параметрыToolStripMenuItem
             // 
             this.параметрыToolStripMenuItem.Name = "параметрыToolStripMenuItem";
-            this.параметрыToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
+            this.параметрыToolStripMenuItem.Size = new System.Drawing.Size(138, 22);
             this.параметрыToolStripMenuItem.Text = "&Параметры";
             // 
             // справкаToolStripMenuItem
@@ -452,35 +457,75 @@ namespace ExcelFromBase
             // содержаниеToolStripMenuItem
             // 
             this.содержаниеToolStripMenuItem.Name = "содержаниеToolStripMenuItem";
-            this.содержаниеToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
+            this.содержаниеToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.содержаниеToolStripMenuItem.Text = "&Содержание";
             // 
             // индексToolStripMenuItem
             // 
             this.индексToolStripMenuItem.Name = "индексToolStripMenuItem";
-            this.индексToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
+            this.индексToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.индексToolStripMenuItem.Text = "&Индекс";
             // 
             // поискToolStripMenuItem
             // 
             this.поискToolStripMenuItem.Name = "поискToolStripMenuItem";
-            this.поискToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
+            this.поискToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.поискToolStripMenuItem.Text = "&Поиск";
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(6, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(155, 6);
             // 
             // опрограммеToolStripMenuItem
             // 
             this.опрограммеToolStripMenuItem.Name = "опрограммеToolStripMenuItem";
-            this.опрограммеToolStripMenuItem.Size = new System.Drawing.Size(32, 19);
+            this.опрограммеToolStripMenuItem.Size = new System.Drawing.Size(158, 22);
             this.опрограммеToolStripMenuItem.Text = "&О программе...";
             // 
             // openFileDialog1
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
+            // 
+            // UserNameTxt
+            // 
+            this.UserNameTxt.AutoSize = true;
+            this.UserNameTxt.Location = new System.Drawing.Point(28, 38);
+            this.UserNameTxt.Name = "UserNameTxt";
+            this.UserNameTxt.Size = new System.Drawing.Size(105, 13);
+            this.UserNameTxt.TabIndex = 16;
+            this.UserNameTxt.Text = "Имя Пользователя";
+            // 
+            // TemplateFileName
+            // 
+            this.TemplateFileName.Location = new System.Drawing.Point(31, 162);
+            this.TemplateFileName.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.TemplateFileName.Name = "TemplateFileName";
+            this.TemplateFileName.Size = new System.Drawing.Size(186, 20);
+            this.TemplateFileName.TabIndex = 17;
+            this.TemplateFileName.Text = "c:\\temp\\template.xlsx";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(223, 165);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(0, 13);
+            this.label6.TabIndex = 18;
+            // 
+            // UseTemplate
+            // 
+            this.UseTemplate.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.UseTemplate.ForeColor = System.Drawing.Color.MidnightBlue;
+            this.UseTemplate.Location = new System.Drawing.Point(244, 148);
+            this.UseTemplate.Name = "UseTemplate";
+            this.UseTemplate.Size = new System.Drawing.Size(551, 48);
+            this.UseTemplate.TabIndex = 19;
+            this.UseTemplate.Text = "Использовать данный шаблон, если стоит галочка уже будет все создаваться на основ" +
+    "ании этого файла, нужно если  у вас есть готовый шаблон, например при создании р" +
+    "асписания есть готовый шаблон";
+            this.UseTemplate.UseVisualStyleBackColor = true;
+            this.UseTemplate.CheckedChanged += new System.EventHandler(this.UseTemplate_CheckedChanged);
             // 
             // Form1
             // 
@@ -488,6 +533,10 @@ namespace ExcelFromBase
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(959, 591);
+            this.Controls.Add(this.UseTemplate);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.TemplateFileName);
+            this.Controls.Add(this.UserNameTxt);
             this.Controls.Add(this.DisableMessages);
             this.Controls.Add(this.LoadChoiceToArea);
             this.Controls.Add(this.listBoxConfigs);
@@ -509,6 +558,7 @@ namespace ExcelFromBase
             this.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.Name = "Form1";
             this.Text = "Копирование Результата хранимой процедуры в Excel";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -565,6 +615,10 @@ namespace ExcelFromBase
         private ToolStripSeparator toolStripSeparator5;
         private ToolStripMenuItem опрограммеToolStripMenuItem;
         private OpenFileDialog openFileDialog1;
+        private Label UserNameTxt;
+        private TextBox TemplateFileName;
+        private Label label6;
+        private CheckBox UseTemplate;
     }
 }
 

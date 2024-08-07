@@ -11,6 +11,7 @@ using System.Text;
 using System.Windows.Forms;
 using Spire.Xls;
 using System.Data.SqlClient;
+using System.Security.Principal;
 
 namespace ExcelFromBase
 {
@@ -18,12 +19,14 @@ namespace ExcelFromBase
     {
         private Timer timer;
         private bool isBlinking;
+        public string username = "";
         public Form1()
         {
             
             InitializeComponent();
             InitializeBackgroundWorker();
             InitializeBlinkingButton();
+            menuStrip1.Items.Clear();
             StartWork.Enabled = false;
             listBoxConfigs.Enabled = false;
             LoadChoiceToArea.Enabled = false;
@@ -62,10 +65,25 @@ namespace ExcelFromBase
                 return;
 
             }
-
-
-            // Создание экземпляра Workbook
+            string filename = "";
             Workbook workbook = new Workbook();
+            if (UseTemplate.Checked)
+            {
+                filename = TemplateFileName.Text;
+                if (!File.Exists(filename))
+                {
+                    MessageBox.Show("Ошибка шаблон не найден");
+                    return;
+
+                }
+                else
+                {
+                    workbook.LoadFromFile(filename);
+                }
+                
+            } 
+            // Создание экземпляра Workbook
+            
 
             // Проверка заполнения ячейки A1
             if (string.IsNullOrEmpty(server))
@@ -125,6 +143,10 @@ namespace ExcelFromBase
                 {
                     MessageBox.Show("ошибка подключения к серверу " + server + " либо он неправильно введен либо недоступен ");
                 }
+                string paramName;
+                string paramValue;
+                string paramType;
+                string errors;
                 // Обработка каждой хранимой процедуры в JSON
                 foreach (var query in json)
                 {
@@ -134,13 +156,16 @@ namespace ExcelFromBase
                     using (SqlCommand command = new SqlCommand(procedureName, connection))
                     {
                         command.CommandType = CommandType.StoredProcedure;
-
+                        paramName = "";
+                        paramValue = "";
+                        paramValue = "";
+                        errors = "";
                         foreach (var param in query["params"])
                         {
-                            string paramName = param["param"].ToString();
-                            string paramValue = param["value"].ToString();
-                            string paramType = param["type"].ToString();
-                            string errors = "";
+                            paramName = param["param"].ToString();
+                            paramValue = param["value"].ToString();
+                            paramType = param["type"].ToString();
+                            
                             // Проверка наличия обязательных параметров
                             if (string.IsNullOrEmpty(procedureName) || string.IsNullOrEmpty(paramName) || string.IsNullOrEmpty(paramValue) || string.IsNullOrEmpty(paramType) || sheetNum <= 0)
                             {
@@ -182,7 +207,13 @@ namespace ExcelFromBase
                             };
                             command.Parameters.Add(sqlParam);
                         }
-
+                        paramName = "username";
+                        paramType = "string";
+                        SqlParameter sqlUserName = new SqlParameter(paramName, GetSqlDbType(paramType))
+                        {
+                            Value = username
+                        };
+                        command.Parameters.Add(sqlUserName);
 
                         // Проверка существования листа и создание, если его нет
                         Worksheet resultSheet;
@@ -385,6 +416,54 @@ namespace ExcelFromBase
         private void открытьToolStripMenuItem_Click(object sender, EventArgs e)
         {
             openFileDialog1.OpenFile();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            string domainname="";
+            
+            string[] temp = Convert.ToString(WindowsIdentity.GetCurrent().Name).Split('\\');
+            if (!string.IsNullOrEmpty(temp[1]))
+            {
+                username = temp[1];
+            } else
+            {
+                MessageBox.Show("Ошибка определения имени");
+            }
+            if (!string.IsNullOrEmpty(temp[0])) {
+                domainname = temp[0];
+            } else
+            {
+                MessageBox.Show("Ошибка определения домена");
+            }
+            int start = 0;
+            if (domainname == "DESKTOP-SUU5GSR") start++;
+            if (domainname == "S-VFU") start++;
+            if (domainname == "DESKTOP-UERLFKI") start++;
+            if (domainname == "DESKTOP - UERLFKI") start++;
+            if (start>0)
+            {
+
+                UserNameTxt.Text = "У вас есть доступ :" + username;
+            } else
+            {
+                MessageBox.Show("Доступа нет все функции заблокированы");
+                UserNameTxt.Text = domainname+username+" у вас нет доступа, так вы не находитесь в домене S-VFU, но при работе  с базой еще будет проверка на доступ к сценариям";
+                LoadSettings.Enabled = false;
+                timer.Stop();
+            }
+
+        }
+
+        private void UseTemplate_CheckedChanged(object sender, EventArgs e)
+        {
+            string filename = TemplateFileName.Text;
+            if (!File.Exists(filename))
+            {
+                MessageBox.Show("Ошибка шаблон не найден");
+                return;
+
+            }
         }
     }
 }
