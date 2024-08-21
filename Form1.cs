@@ -12,6 +12,8 @@ using System.Windows.Forms;
 using Spire.Xls;
 using System.Data.SqlClient;
 using System.Security.Principal;
+using System.Net.Sockets;
+using System.Net;
 
 namespace ExcelFromBase
 {
@@ -26,7 +28,7 @@ namespace ExcelFromBase
             InitializeComponent();
             InitializeBackgroundWorker();
             InitializeBlinkingButton();
-            menuStrip1.Items.Clear();
+            //menuStrip1.Items.Clear();
             StartWork.Enabled = false;
             listBoxConfigs.Enabled = false;
             LoadChoiceToArea.Enabled = false;
@@ -35,6 +37,7 @@ namespace ExcelFromBase
         private BackgroundWorker backgroundWorker;
         private void InitializeBackgroundWorker()
         {
+#pragma warning disable IDE0017
             backgroundWorker = new BackgroundWorker();
             backgroundWorker.WorkerReportsProgress = true;
             backgroundWorker.DoWork += new DoWorkEventHandler(BackgroundWorker_DoWork);
@@ -53,8 +56,33 @@ namespace ExcelFromBase
                     throw new ArgumentException("Unsupported type");
             }
         }
+        public static bool IsServerAvailable(string ipAddress, int port)
+        {
+            try
+            {
+                using (TcpClient client = new TcpClient())
+                {
+                    // Устанавливаем тайм-аут на 1 секунды
+                    client.ReceiveTimeout = 1000;
+                    client.SendTimeout = 1000;
+
+                    // Пытаемся подключиться к серверу
+                    client.Connect(ipAddress, port);
+                    return true;
+                }
+            }
+            catch (SocketException)
+            {
+                return false;
+            }
+        }
         private void Start(string resultFilePath, string jsonString, string server, string basename)
         {
+
+            if (!IsServerAvailable(server, 1433)) {
+                MessageBox.Show($" {server} сервер недоступен, вероятны порты закрыты или вы находитесь вне доступной сети");
+                return;
+            }
 
             string resultcheckFilePath = "c:\\temp\\~$result.xlsx";
             //resultFilePath = "c:\\temp\\result.xlsx";
@@ -65,7 +93,7 @@ namespace ExcelFromBase
                 return;
 
             }
-            string filename = "";
+            string filename;
             Workbook workbook = new Workbook();
             if (UseTemplate.Checked)
             {
@@ -130,9 +158,17 @@ namespace ExcelFromBase
             }
 
             // Подключение к MSSQL
-            string connectionString = "Data Source=" + server + ";Initial Catalog=" + basename + ";Integrated Security=True;Connect Timeout=30";
-
-
+            string connectionString;
+            if (string.IsNullOrEmpty(LoginName.Text) || string.IsNullOrEmpty(Login2.Text))
+            {
+                connectionString = "Data Source=" + server + ";Initial Catalog=" + basename + ";Integrated Security=True;Connect Timeout=30";
+                MessageBox.Show("Пробуем подключиться встроенной учетной записью если не получится придется ввести логин и пароль");
+            }
+            else
+            {
+                connectionString = $"Server ={server}; Database ={basename};User Id={LoginName.Text};Password={Login2.Text};";
+                MessageBox.Show("Пробуем подключиться введенными учетными данными");
+            }
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 try
@@ -141,7 +177,8 @@ namespace ExcelFromBase
                 }
                 catch
                 {
-                    MessageBox.Show("ошибка подключения к серверу " + server + " либо он неправильно введен либо недоступен ");
+                    MessageBox.Show("ошибка учетных данных " + server + " попробуйте другой вариант ");
+                    return;
                 }
                 string paramName;
                 string paramValue;
@@ -408,15 +445,6 @@ namespace ExcelFromBase
             StartWork.Enabled = true;
         }
 
-        private void MenuWork_Opening(object sender, CancelEventArgs e)
-        {
-
-        }
-
-        private void открытьToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            openFileDialog1.OpenFile();
-        }
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -464,6 +492,56 @@ namespace ExcelFromBase
                 return;
 
             }
+        }
+
+        private void UploadExcel_Click(object sender, EventArgs e)
+        {
+            string server = ServerName.Text;
+            string basename = DataBaseName.Text;
+            string login = LoginName.Text;
+            string passw = Login2.Text;
+
+            if (string.IsNullOrEmpty(login) || string.IsNullOrEmpty(passw) || string.IsNullOrEmpty(server) || string.IsNullOrEmpty(basename))
+            {
+                MessageBox.Show("Для работы с этим надо обязательно ввести данные ИИСУСС пользователя, сервер и базу");
+                return;
+            }
+            if (!IsServerAvailable(server, 1433))
+            {
+                MessageBox.Show($" {server} сервер недоступен, вероятны порты закрыты или вы находитесь вне доступной сети");
+                return;
+            }
+
+            string connectionString = $"Server ={server}; Database ={basename};User Id={login};Password={passw};";
+
+                try
+                {
+                    using (SqlConnection connection = new SqlConnection(connectionString))
+                    {
+                        connection.Open();
+                    // Ваш код для работы с базой данных здесь
+                    //MessageBox.Show("Подключение успешно установлено.");
+                    Form2 form2 = new Form2(connectionString,login);
+                    // Показываем Form2
+                    form2.Show();
+                }
+                }
+                catch (SqlException ex)
+                {
+                MessageBox.Show("Ошибка при подключении к базе данных: " + ex.Message);
+                return;
+                }
+                catch (InvalidOperationException ex)
+                {
+                MessageBox.Show("Ошибка: " + ex.Message);
+                return;
+            }
+                catch (Exception ex)
+                {
+                MessageBox.Show("Произошла ошибка: " + ex.Message);
+                return;
+            }
+                
         }
     }
 }
