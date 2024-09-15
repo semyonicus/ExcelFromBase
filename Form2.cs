@@ -300,8 +300,10 @@ namespace ExcelFromBase
             {
                 string query = $"SELECT ПолеТаблицы, ТипДанных FROM YSUMain.dbo.ПоляДляТаблиц where Таблица='{_selectedScenarioTable}'";
                 string createTableQuery = $"CREATE TABLE publicbase.dbo.{tableName} (";
-                cnn.Open();
-
+                if (cnn.State == System.Data.ConnectionState.Closed)
+                {
+                    cnn.Open();
+                }
                 using (SqlCommand cmd = new SqlCommand(query, cnn))
                 {
                     using (SqlDataReader reader = cmd.ExecuteReader())
@@ -314,8 +316,10 @@ namespace ExcelFromBase
                         }
                     }
                 }
-                cnn.Close();
-
+                if (cnn.State == System.Data.ConnectionState.Open)
+                {
+                    cnn.Close();
+                }
                 createTableQuery = createTableQuery.TrimEnd(',') + ")";
                 return createTableQuery;
             }
