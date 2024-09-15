@@ -20,7 +20,7 @@ namespace ExcelFromBase
         static string _connectionString;
         private static string _login;
         private string _selectedFile;
-        private string _selectedScenarioTable;
+        public string _selectedScenarioTable;
 
         public Form2(string connectionString, string login)
         {
@@ -156,6 +156,14 @@ namespace ExcelFromBase
             {
                 _selectedScenarioTable = ((dynamic)listBox.SelectedItem).ScenarioTable;
             };
+            if (listBox.Items.Count > 0)
+            {
+                listBox.SelectedIndex = 0;
+            } else {
+                MessageBox.Show("К сожалению у вас нет доступа ни к каким операциям");
+                listBox.Visible = false;
+            }
+
         }
 
         private void StartButton_Click(object sender, EventArgs e)
@@ -278,20 +286,24 @@ namespace ExcelFromBase
             string deleteTableQuery = $"select * from publicbase.dbo.{tableName}";
             try
             {
+                cnn.Open();
                 using (SqlCommand deleteCmd = new SqlCommand(deleteTableQuery, cnn))
                 {
-                    deleteCmd.ExecuteNonQuery();
+                    using (var reader = deleteCmd.ExecuteReader())
+                    {
+                        cnn.Close();
+                        return $"delete from publicbase.dbo.{tableName}";
+                    }
                 }
-                return $"delete from publicbase.dbo.{tableName}"; 
             }
             catch
             {
                 string query = $"SELECT ПолеТаблицы, ТипДанных FROM YSUMain.dbo.ПоляДляТаблиц where Таблица='{_selectedScenarioTable}'";
                 string createTableQuery = $"CREATE TABLE publicbase.dbo.{tableName} (";
-                
+                cnn.Open();
+
                 using (SqlCommand cmd = new SqlCommand(query, cnn))
                 {
-                    cnn.Open();
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
@@ -301,9 +313,9 @@ namespace ExcelFromBase
                             createTableQuery += $"[{field}] {dataType},";
                         }
                     }
-                    cnn.Close();
                 }
-                
+                cnn.Close();
+
                 createTableQuery = createTableQuery.TrimEnd(',') + ")";
                 return createTableQuery;
             }
